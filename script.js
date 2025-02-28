@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const travelDaysInput = document.getElementById('travelDays');
+    const errorDiv = document.getElementById('error');
     const warningDiv = document.getElementById('warning');
 
     // Function to calculate end date based on start date and travel days
@@ -19,8 +20,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (startDateInput.value && endDateInput.value) {
             const startDate = new Date(startDateInput.value);
             const endDate = new Date(endDateInput.value);
-            const travelDays = Math.round((endDate - startDate) / (1000 * 3600 * 24));
-            travelDaysInput.value = travelDays;
+            if (startDate.getTime() <= endDate.getTime()) {
+                const travelDays = Math.round((endDate - startDate) / (1000 * 3600 * 24));
+                travelDaysInput.value = travelDays;
+            }
+        }
+    }
+
+    // Function to validate dates
+    function validateDates() {
+        if (startDateInput.value && endDateInput.value) {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            if (startDate.getTime() > endDate.getTime()) {
+                errorDiv.innerText = "Error: Travel Start Date cannot be after Travel End Date.";
+                startDateInput.style.border = "1px solid red";
+                endDateInput.style.border = "1px solid red";
+                return false;
+            } else {
+                errorDiv.innerText = "";
+                startDateInput.style.border = "1px solid #ccc";
+                endDateInput.style.border = "1px solid #ccc";
+                return true;
+            }
+        } else {
+            errorDiv.innerText = "";
+            startDateInput.style.border = "1px solid #ccc";
+            endDateInput.style.border = "1px solid #ccc";
+            return true;
         }
     }
 
@@ -33,16 +60,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Calculate travel days initially
+    calculateTravelDays();
+
     // Event listeners for input changes
     startDateInput.addEventListener('change', function() {
-        calculateTravelDays();
-        calculateEndDate();
-        checkNegativeTravelDays();
+        if (validateDates()) {
+            calculateTravelDays();
+            calculateEndDate();
+        }
+    });
+    startDateInput.addEventListener('input', function() {
+        if (validateDates()) {
+            calculateTravelDays();
+            calculateEndDate();
+        }
     });
 
     endDateInput.addEventListener('change', function() {
+        // Prevent changes to end date
+        endDateInput.value = "2025-03-20";
         calculateTravelDays();
-        checkNegativeTravelDays();
+    });
+    endDateInput.addEventListener('input', function() {
+        // Prevent changes to end date
+        endDateInput.value = "2025-03-20";
+        calculateTravelDays();
     });
 
     travelDaysInput.addEventListener('input', function() {
@@ -53,11 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Additional event listener for keyup to ensure real-time updates
     travelDaysInput.addEventListener('keyup', function() {
         calculateEndDate();
-        checkNegativeTravelDays();
-    });
-
-    endDateInput.addEventListener('keyup', function() {
-        calculateTravelDays();
         checkNegativeTravelDays();
     });
 });
