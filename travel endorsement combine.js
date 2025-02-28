@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const travelDaysInput = document.getElementById('travelDays');
+    const warningDiv = document.getElementById('warning');
 
     // Function to calculate end date based on start date and travel days
     function calculateEndDate() {
@@ -23,26 +24,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Function to check for negative travel days
+    function checkNegativeTravelDays() {
+        if (travelDaysInput.value && parseInt(travelDaysInput.value) < 0) {
+            warningDiv.innerText = "Warning: Travel Days cannot be negative.";
+        } else {
+            warningDiv.innerText = "";
+        }
+    }
+
     // Event listeners for input changes
     startDateInput.addEventListener('change', function() {
         calculateTravelDays();
         calculateEndDate();
+        checkNegativeTravelDays();
     });
 
     endDateInput.addEventListener('change', function() {
         calculateTravelDays();
+        checkNegativeTravelDays();
     });
 
     travelDaysInput.addEventListener('input', function() {
         calculateEndDate();
+        checkNegativeTravelDays();
     });
 
     // Additional event listener for keyup to ensure real-time updates
     travelDaysInput.addEventListener('keyup', function() {
         calculateEndDate();
+        checkNegativeTravelDays();
     });
 
     endDateInput.addEventListener('keyup', function() {
         calculateTravelDays();
+        checkNegativeTravelDays();
     });
 });
