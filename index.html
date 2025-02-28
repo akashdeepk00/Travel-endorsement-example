@@ -11,11 +11,12 @@
         <h2>Travel Planner</h2>
         <form>
             <label for="startDate">Travel Start Date:</label>
-            <input type="date" id="startDate" name="startDate"><br><br>
+            <input type="date" id="startDate" name="startDate" value="2025-03-01"><br><br>
             <label for="endDate">Travel End Date:</label>
-            <input type="date" id="endDate" name="endDate"><br><br>
+            <input type="date" id="endDate" name="endDate" value="2025-03-20" readonly><br><br>
             <label for="travelDays">Travel Days:</label>
             <input type="number" id="travelDays" name="travelDays"><br><br>
+            <div id="error" style="color: red;"></div>
             <div id="warning" style="color: orange;"></div>
         </form>
     </div>
