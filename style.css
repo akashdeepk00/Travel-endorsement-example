@@ -24,3 +24,8 @@ input[type="date"], input[type="number"] {
     padding: 10px;
     border: 1px solid #ccc;
 }
+
+input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
